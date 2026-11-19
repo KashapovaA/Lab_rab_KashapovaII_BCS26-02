@@ -10,12 +10,12 @@ def print_result(name: str, fractions: dict[str, float], total_mass: float) -> N
     print(f"Тип смеси: {name}")
     print("Массы компонентов:")
     for comp, mass in component_masses(total_mass, fractions).items():
-        print(f"  {comp:<12} -> {mass:.2f} кг")
+        print(f" {comp:<12} -> {mass:.2f} кг")
 
     total = fractions_sum(fractions)
     if fractions_sum_ok(fractions):
-        print(f"Сумма долей: {total:.2f} - состав корректный")
-    else:
+        print(f"Сумма долей: {total:.2f}")
+    else: 
         print(f"Сумма долей: {total:.4f} - ошибка состава, сумма не равна 1")
 
     print(f"Класс партии: {part_class(total_mass)}")
