@@ -183,7 +183,6 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f" list : {timings['list']:.8f} с")
         print(f" deque : {timings['deque']:.8f} с")
         print(f" отношение (list/deque): {timings['list']/timings['deque']:.2f}")
-
     print_footer()
     return 0
 
