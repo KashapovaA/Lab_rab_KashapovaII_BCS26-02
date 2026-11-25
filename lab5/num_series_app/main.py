@@ -21,7 +21,8 @@ from typing import List, Optional, Tuple
 
 from num_series import (
     random_series, sine_series, trend_series, summarize, load_series_auto, save_series_json,
-    simple_moving_average, centered_moving_average, exponential_moving_average
+    simple_moving_average, centered_moving_average, exponential_moving_average,
+    benchmark_moving_average,
 )
 # ---------------------
 # Источники данных
@@ -113,6 +114,12 @@ def build_parser() -> argparse.ArgumentParser:
                         help="размер окна для скользящей средней")
     parser.add_argument("--alpha", type=float, default=0.3,
                         help="коэффициент сглаживания для EMA, 0 < alpha <= 1")
+    # бенчмарк
+    parser.add_argument(
+        "--benchmark",
+        action="store_true",
+        help="замерить время выполнения SMA для list и deque",
+    )
     return parser
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -158,7 +165,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     except ValueError as err:
         print(f"Ошибка анализа: {err}", file=sys.stderr)
         return 1
-    
+
     # --- 4. Вывод ---
     print_header(source)
     print_stats(stats)
@@ -167,26 +174,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     print_series(f"EMA (alpha={args.alpha})", ema)
     if cma is not None:
         print_series(f"Центрированное MA (window={args.window})", cma)
+
+    # --- 5. Бенчмарк (перед print_footer()) ---
+    if args.benchmark:
+        print("-" * 60)
+        print("Замер времени выполнения SMA (среднее за 1000 повторов):")
+        timings = benchmark_moving_average(data, args.window, repeats=1000)
+        print(f" list : {timings['list']:.8f} с")
+        print(f" deque : {timings['deque']:.8f} с")
+        print(f" отношение (list/deque): {timings['list']/timings['deque']:.2f}")
+
     print_footer()
     return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-from num_series import (
- benchmark_moving_average,
-)
-# в build_parser() добавьте аргумент:
-parser.add_argument(
-    "--benchmark",
-    action="store_true",
-    help="замерить время выполнения SMA для list и deque",
-)
-# в main() после вывода всех рядов (перед print_footer()) добавьте:
-if args.benchmark:
-    print("-" * 60)
-    print("Замер времени выполнения SMA (среднее за 1000 повторов):")
-    timings = benchmark_moving_average(data, args.window, repeats=1000)
-    print(f" list : {timings['list']:.8f} с")
-    print(f" deque : {timings['deque']:.8f} с")
-    print(f" отношение (list/deque): {timings['list']/timings['deque']:.2f}")
