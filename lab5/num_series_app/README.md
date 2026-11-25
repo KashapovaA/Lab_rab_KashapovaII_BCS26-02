@@ -8,7 +8,7 @@ SMA и EMA в одном CSV, краевой случай k > n.
 
 ```
 num_series_app/
-├── num_series/ # основной пакет (ЛР 5 и ЛР 5.1)
+├── num_series/
 │ ├── __init__.py
 │ ├── generator.py
 │ ├── stats.py
