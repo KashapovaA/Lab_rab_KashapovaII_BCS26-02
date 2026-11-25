@@ -8,15 +8,27 @@ SMA и EMA в одном CSV, краевой случай k > n.
 
 ```
 num_series_app/
-├── num_series/
-│   ├── __init__.py          # экспорт публичного API пакета
-│   ├── generator.py         # random / sine / trend / stock (вариант 6)
-│   ├── stats.py             # среднее, медиана, размах + max_drawdown
-│   ├── moving_average.py    # SMA (бегущая сумма), CMA, EMA, бенчмарк
-│   ├── deque_average.py     # SMA/CMA/EMA через collections.deque (5.1)
-│   ├── io_json.py           # сохранение и чтение JSON
-│   └── io_file.py           # чтение txt/csv, auto-парсер
-├── main.py                  # CLI: связывает всё вместе
+├── num_series/ # основной пакет (ЛР 5 и ЛР 5.1)
+│ ├── __init__.py
+│ ├── generator.py
+│ ├── stats.py
+│ ├── moving_average.py
+│ ├── deque_average.py
+│ ├── io_json.py
+│ └── io_file.py
+├── tests/ # пакет тестов (создаётся в ЛР 5.2)
+│ ├── __init__.py
+│ ├── test_generator.py # тесты генераторов и _validate_n
+│ ├── test_stats.py # тесты mean, median, spread, summarize
+│ ├── test_moving_average.py # тесты SMA, CMA, EMA и benchmark
+│ ├── test_deque_average.py # тесты deque-версии и сравнение с list
+│ ├── test_io_json.py # тесты сохранения/чтения JSON
+│ ├── test_io_file.py # тесты чтения TXT, CSV и auto-парсера
+│ └── test_cli.py # интеграционные тесты main.py
+├── conftest.py # добавление корня проекта в sys.path
+├── pytest.ini # параметры запуска pytest по умолчанию
+├── run_self_tests.py # автономный запуск проверок без pytest
+├── main.py # CLI-точка входа
 └── README.md
 ```
 
